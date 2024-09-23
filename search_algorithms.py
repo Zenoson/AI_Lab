@@ -111,6 +111,21 @@ class TreeSearchAlgorithm(GoalSearchAgent):
         Remember that "tree search" may re-enqueue or re-extend the same state, multiple times.
         """
 
+        RandomSearch.enqueue(self, initial_state, cutoff)
+
+        while (len(RandomSearch.frontier)>0):
+            state = RandomSearch.dequeue()
+            if state.is_goal_state:
+                return state
+            if gui_callback_fn(state):
+                return None #????
+            
+            actions = state.get_all_actions()
+            for i in actions:
+                state.get_next_state(i)
+
+
+        
         #TODO implement!
         return None
 
