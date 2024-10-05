@@ -111,24 +111,29 @@ class TreeSearchAlgorithm(GoalSearchAgent):
         Remember that "tree search" may re-enqueue or re-extend the same state, multiple times.
         """
 
-        RandomSearch.enqueue(initial_state)
+        self.enqueue(initial_state, cutoff)
 
-        while (len(RandomSearch.frontier)>0):
-            state = RandomSearch.dequeue()
-            if state.is_goal_state:
+        while (len(self.frontier)>0):
+            state = self.dequeue()
+            if state.is_goal_state():
+                print("goal state")
                 return state
             if gui_callback_fn(state):
+                print("gui_callback_fn true??")
                 return None
             
             actions = state.get_all_actions()
             for i in actions:
                 # check if parent state though
                 # pass cutoff
-                if (state.get_next_state(i)!=state.parent):
-                    RandomSearch.enqueue(state, state.get_next_state(i), cutoff) #not sure if this works
-                    self.total_extends+=1
-                    self.total_enqueues+=1 # also not sure if works
+                print(i)
+                self.total_extends+=1 #not sure about extends/enqueues
 
+                if (state.get_next_state(i)!=state.parent):
+                    print("not parent")
+                    self.enqueue(state.get_next_state(i), cutoff) #not sure if this works
+                    self.total_enqueues+=1 # also not sure if works
+        print("what")
         return None
 
 class DepthFirstSearch(GoalSearchAgent):
