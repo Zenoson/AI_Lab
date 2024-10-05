@@ -123,6 +123,8 @@ class TreeSearchAlgorithm(GoalSearchAgent):
                 return None
             
             actions = state.get_all_actions()
+            self.total_extends += 1
+            
             for i in actions:
                 # check if parent state though
                 # pass cutoff
