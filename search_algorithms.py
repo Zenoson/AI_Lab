@@ -126,15 +126,14 @@ class TreeSearchAlgorithm(GoalSearchAgent):
             self.total_extends += 1
             
             for i in actions:
-                # check if parent state though
-                # pass cutoff
                 print(i)
-                self.total_extends+=1 #not sure about extends/enqueues
+                self.total_extends+=1
 
                 if (state.get_next_state(i)!=state.parent):
                     print("not parent")
-                    self.enqueue(state.get_next_state(i), cutoff) #not sure if this works
-                    self.total_enqueues+=1 # also not sure if works
+                    # this might not be how it's supposed to work
+                    self.enqueue(state.get_next_state(i), cutoff)
+                    self.total_enqueues+=1
         print("what")
         return None
 
