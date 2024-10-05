@@ -165,7 +165,6 @@ class SlidePuzzleState(StateNode):
                     return False
                 t += 1
 
-
         return True
     
     # Override
@@ -177,9 +176,16 @@ class SlidePuzzleState(StateNode):
         
         Actions are Coordinate objects, specifying the position of the tile that
         is to be moved into the empty slot. That Coordinate needs to be not out of bounds, and 
-        actually adjacent to the emty slot.
+        actually adjacent to the empty slot.
         """
-        # TODO implement!
+
+        # check if adjacent tiles have value 0
+
+        if (0<= action.row and action.row < self.get_size() and 0 <= action.col and action.col < self.get_size()):
+            c = self.get_empty_pos
+            if (c.col-action.col+c.row-action.row==1 or c.col-action.col+c.row-action.row==-1):
+                return True
+
         return False
     
 
