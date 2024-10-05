@@ -192,12 +192,21 @@ class SlidePuzzleState(StateNode):
     # Override
     def get_all_actions(self) -> Iterable[SlidePuzzleAction]:
         """Return all legal actions at this state."""
-        # TODO implement! This is a good candidate for using yield (generator function)
-        yield from ()
-        # alternatively, return a list, tuple, or use comprehension
-        return []
-        
 
+        col = self.get_empty_pos.col
+        row = self.get_empty_pos.row
+
+        possible_actions = [
+            Coordinate(col-1,row),
+            Coordinate(col,row-1),
+            Coordinate(col+1,row),
+            Coordinate(col,row+1)
+        ]
+
+        for action in possible_actions:
+            if self.is_legal_action(action):
+                yield action
+        
     # Override
     def describe_last_action(self) -> str:
         """Returns a string describing the last_action taken (that resulted in transitioning from parent to this state)
