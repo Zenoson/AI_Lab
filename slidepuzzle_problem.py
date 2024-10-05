@@ -66,12 +66,22 @@ class SlidePuzzleState(StateNode):
         representing the initial configuration of the tiles in the grid. 
         The number 0 represents the blank tile. 
         """
+
         with open(filename, 'r') as file:
-            # TODO read file and return an initial SlidePuzzleState.
-            # This return statement is just a dummy.
+            N = int(file.readline().strip())
+
+            temp_tiles = []
+            for i in range(N):
+                row = list(map(int, file.readline().strip().split()))
+                temp_tiles.append(tuple(row))
+
+            for row in range(N):
+                if 0 in temp_tiles[row]:
+                    pos = Coordinate(row, temp_tiles[row].index(0))
+                    break
             return SlidePuzzleState( 
-                tiles = ((0,),), # tuple of tuple of 0, dummy value
-                empty_pos = Coordinate(0,0), # dummy value
+                tiles = tuple(temp_tiles),
+                empty_pos = pos,
                 parent = None,
                 last_action = None,
                 depth = 0,
