@@ -257,37 +257,39 @@ class GraphSearchAlgorithm(GoalSearchAgent):
         Create a set of extended states. Before extending any state, check if the state has already been extended.
         If so, skip it. Otherwise, extend and add to the set. 
         """
-        ext_filter : Set[StateNode] = set() 
         self.enqueue(initial_state, cutoff)
-
+        extended_states = set()  # Set to track extended states
+    
         while len(self.frontier) > 0:
             state = self.dequeue()
 
-        if gui_callback_fn(state):
-             print("Search ended by GUI callback.")
-             return None
+            if state in extended_states:
+                continue  # Skip already extended states
         
-        if state not in ext_filter:
-            ext_filter.add(state)
+            if state.is_goal_state():
+                print("Goal state found!")
+                return state
+
+            if gui_callback_fn(state):
+                print("Search terminated by GUI callback.")
+                return None
+
             self.total_extends += 1
-
-        if state.is_goal_state():
-            print("Goal state found!!!")
-            return state
+            extended_states.add(state)
         
-        actions = state.get_all_actions()
+            actions = state.get_all_actions()
 
-        for action in actions:
-            next_state = state.get_next_state(action)
+            for action in actions:
+                next_state = state.get_next_state(action)
 
-            if next_state not in ext_filter:
-                self.enqueue(next_state, cutoff)
-                self.total_enqueues += 1
+                # Avoid revisiting parent state
+                if next_state != state.parent:
+                    self.enqueue(next_state, cutoff)
+                    self.total_enqueues += 1
 
         print("Search failed to find a solution.")
         return None
-
-
+    
 #### Lab 1, Part 2b: Informed Search #################################################
 
 class InformedSearchAgent(GoalSearchAgent):
