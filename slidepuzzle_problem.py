@@ -227,7 +227,6 @@ class SlidePuzzleState(StateNode):
 
         -- action is assumed legal (is_legal_action called before), but a ValueError may be passed for illegal actions if desired.
         """
-       # TODO implement! Remember that this returns a NEW state, and doesn't change this one.
         temp_tiles = [list(i) for i in self.tiles]
         val = temp_tiles[action.row][action.col]
         temp_tiles[action.row][action.col] = 0
