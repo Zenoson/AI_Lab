@@ -113,28 +113,28 @@ class TreeSearchAlgorithm(GoalSearchAgent):
 
         self.enqueue(initial_state, cutoff)
 
-        while (len(self.frontier)>0):
+        while len(self.frontier) > 0:
             state = self.dequeue()
-            if state.is_goal_state():
-                print("goal state")
-                return state
-            if gui_callback_fn(state):
-                print("gui_callback_fn true??")
-                return None
-            
-            actions = state.get_all_actions()
-            self.total_extends += 1
-            
-            for i in actions:
-                print(i)
-                self.total_extends+=1
 
-                if (state.get_next_state(i)!=state.parent):
-                    print("not parent")
-                    # this might not be how it's supposed to work
-                    self.enqueue(state.get_next_state(i), cutoff)
-                    self.total_enqueues+=1
-        print("what")
+            if state.is_goal_state():
+                print("Goal state found!")
+                return state
+
+            if gui_callback_fn(state):
+                print("Search terminated by GUI callback.")
+                return None
+
+            self.total_extends += 1
+            actions = state.get_all_actions()
+
+            for action in actions:
+                next_state = state.get_next_state(action)
+
+                if next_state != state.parent:
+                    self.enqueue(next_state, cutoff)
+                    self.total_enqueues += 1
+
+        print("Search failed to find a solution.")
         return None
 
 class DepthFirstSearch(GoalSearchAgent):
@@ -258,11 +258,34 @@ class GraphSearchAlgorithm(GoalSearchAgent):
         If so, skip it. Otherwise, extend and add to the set. 
         """
         ext_filter : Set[StateNode] = set() 
-    
-        #TODO implement! (You may start by copying your TreeSearch's code)
-        
-        return None
+        self.enqueue(initial_state, cutoff)
 
+        while len(self.frontier) > 0:
+            state = self.dequeue()
+
+        if gui_callback_fn(state):
+             print("Search ended by GUI callback.")
+             return None
+        
+        if state not in ext_filter:
+            ext_filter.add(state)
+            self.total_extends += 1
+
+        if state.is_goal_state():
+            print("Goal state found!!!")
+            return state
+        
+        actions = state.get_all_actions()
+
+        for action in actions:
+            next_state = state.get_next_state(action)
+
+            if next_state not in ext_filter:
+                self.enqueue(next_state, cutoff)
+                self.total_enqueues += 1
+
+        print("Search failed to find a solution.")
+        return None
 
 
 #### Lab 1, Part 2b: Informed Search #################################################
@@ -335,15 +358,11 @@ class AStarSearch(InformedSearchAgent):
         super().__init__(heuristic, *args, **kwargs)
         # TODO initiate frontier data structure
 
-
-        
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
        # TODO 
         raise NotImplementedError
 
-
-        
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the state with LOWEST ESTIMATED TOTAL PATH COST from the frontier."""
         # TODO 
