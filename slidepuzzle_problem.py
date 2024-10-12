@@ -182,7 +182,7 @@ class SlidePuzzleState(StateNode):
         # check if adjacent tiles have value 0
 
         if (0<= action.row and action.row < self.get_size() and 0 <= action.col and action.col < self.get_size()):
-            c = self.get_empty_pos
+            c = self.get_empty_pos()
             if (c.col-action.col+c.row-action.row==1 or c.col-action.col+c.row-action.row==-1):
                 return True
 
@@ -193,8 +193,8 @@ class SlidePuzzleState(StateNode):
     def get_all_actions(self) -> Iterable[SlidePuzzleAction]:
         """Return all legal actions at this state."""
 
-        col = self.get_empty_pos.col
-        row = self.get_empty_pos.row
+        col = self.get_empty_pos().col
+        row = self.get_empty_pos().row
 
         possible_actions = [
             Coordinate(col-1,row),
@@ -231,7 +231,7 @@ class SlidePuzzleState(StateNode):
         temp_tiles = [list(i) for i in self.tiles]
         val = temp_tiles[action.row][action.col]
         temp_tiles[action.row][action.col] = 0
-        temp_tiles[self.get_empty_pos.row][self.get_empty_pos.col] = val
+        temp_tiles[self.get_empty_pos().row][self.get_empty_pos().col] = val
         return SlidePuzzleState( 
                 tiles = tuple(temp_tiles),
                 empty_pos = Coordinate(action.row, action.col),
