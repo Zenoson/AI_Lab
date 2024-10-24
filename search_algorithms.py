@@ -124,7 +124,6 @@ class TreeSearchAlgorithm(GoalSearchAgent):
                 print("Search terminated by GUI callback.")
                 return None
 
-            self.total_extends += 1
             actions = state.get_all_actions()
 
             for action in actions:
@@ -132,7 +131,6 @@ class TreeSearchAlgorithm(GoalSearchAgent):
 
                 if next_state != state.parent:
                     self.enqueue(next_state, cutoff)
-                    self.total_enqueues += 1
 
         print("Search failed to find a solution.")
         return None
